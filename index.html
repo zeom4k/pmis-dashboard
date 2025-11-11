@@ -1,0 +1,2024 @@
+<!doctype html>
+<html lang="en">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Project Management Information Systems</title>
+  <script src="/_sdk/element_sdk.js"></script>
+  <script src="/_sdk/data_sdk.js"></script>
+  <style>
+    body {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      height: 100%;
+      overflow: hidden;
+    }
+    
+    html {
+      height: 100%;
+    }
+    
+    * {
+      box-sizing: border-box;
+    }
+    
+    .container {
+      display: flex;
+      height: 100%;
+      overflow: hidden;
+    }
+    
+    .sidebar {
+      width: 320px;
+      background: #ffffff;
+      box-shadow: 4px 0 12px rgba(0, 0, 0, 0.1);
+      overflow-y: auto;
+      overflow-x: hidden;
+    }
+    
+    .header {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 24px 20px;
+      text-align: center;
+      border-bottom: 3px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    .header h1 {
+      margin: 0;
+      font-size: 20px;
+      font-weight: 600;
+      line-height: 1.4;
+    }
+    
+    .modules {
+      padding: 12px 0;
+    }
+    
+    .module {
+      margin: 8px 12px;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+      transition: all 0.3s ease;
+    }
+    
+    .module:hover {
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+      transform: translateX(4px);
+    }
+    
+    .module-header {
+      padding: 16px;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: all 0.3s ease;
+      color: white;
+      font-weight: 600;
+      font-size: 14px;
+    }
+    
+    .module-header:hover {
+      filter: brightness(1.1);
+    }
+    
+    .module-icon {
+      transition: transform 0.3s ease;
+      font-size: 18px;
+    }
+    
+    .module.expanded .module-icon {
+      transform: rotate(90deg);
+    }
+    
+    .module-content {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.4s ease;
+      background: white;
+    }
+    
+    .module.expanded .module-content {
+      max-height: 500px;
+    }
+    
+    .module-item {
+      padding: 12px 20px;
+      border-left: 3px solid transparent;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      color: #444;
+      font-size: 13px;
+    }
+    
+    .module-item:hover {
+      background: #f8f9fa;
+      border-left-color: currentColor;
+      padding-left: 24px;
+    }
+    
+    .module-item.active {
+      background: #f0f2ff;
+      border-left-color: #667eea;
+      font-weight: 500;
+      color: #667eea;
+    }
+    
+    .scope-management-section {
+      background: white;
+      border-radius: 16px;
+      padding: 32px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      display: none;
+    }
+    
+    .scope-management-section.active {
+      display: block;
+    }
+    
+    .scope-tabs {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+    }
+    
+    .scope-tab-btn {
+      padding: 10px 16px;
+      background: #f1f5f9;
+      color: #64748b;
+      border: none;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-family: inherit;
+    }
+    
+    .scope-tab-btn:hover {
+      background: #e2e8f0;
+    }
+    
+    .scope-tab-btn.active {
+      background: #1e293b;
+      color: white;
+    }
+    
+    .scope-tab-content {
+      display: none;
+    }
+    
+    .scope-tab-content.active {
+      display: block;
+    }
+    
+    .scope-input-group {
+      margin-bottom: 16px;
+    }
+    
+    .scope-input-group label {
+      display: block;
+      font-weight: 600;
+      color: #555;
+      margin-bottom: 6px;
+      font-size: 13px;
+    }
+    
+    .scope-input {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+      font-size: 14px;
+      font-family: inherit;
+      transition: all 0.2s ease;
+    }
+    
+    .scope-input:focus {
+      outline: none;
+      border-color: #667eea;
+      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    }
+    
+    .scope-textarea {
+      min-height: 100px;
+      resize: vertical;
+    }
+    
+    .scope-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+    
+    .scope-actions {
+      display: flex;
+      gap: 12px;
+      margin-top: 20px;
+    }
+    
+    .deliverable-item {
+      background: #f8f9ff;
+      padding: 12px;
+      border-radius: 8px;
+      margin-bottom: 12px;
+      border-left: 3px solid #667eea;
+    }
+    
+    .deliverable-item strong {
+      color: #667eea;
+      display: block;
+      margin-bottom: 4px;
+    }
+    
+    .change-request-item {
+      background: #fff3cd;
+      padding: 12px;
+      border-radius: 8px;
+      margin-bottom: 12px;
+      border-left: 3px solid #ffc107;
+    }
+    
+    .change-request-item.approved {
+      background: #d4edda;
+      border-left-color: #28a745;
+    }
+    
+    .change-request-item.rejected {
+      background: #f8d7da;
+      border-left-color: #dc3545;
+    }
+    
+    .main-content {
+      flex: 1;
+      padding: 40px;
+      overflow-y: auto;
+    }
+    
+    .dashboard {
+      max-width: 100%;
+      margin: 0;
+    }
+    
+    .scope-section {
+      background: white;
+      border-radius: 16px;
+      padding: 32px;
+      margin-bottom: 24px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+    
+    .scope-section h2 {
+      color: #667eea;
+      font-size: 28px;
+      margin: 0 0 16px 0;
+      font-weight: 700;
+    }
+    
+    .scope-section p {
+      color: #444;
+      font-size: 16px;
+      line-height: 1.6;
+      margin: 0 0 16px 0;
+    }
+    
+    .scope-section ul {
+      margin: 0;
+      padding-left: 24px;
+      color: #555;
+      line-height: 1.8;
+    }
+    
+    .scope-section li {
+      margin-bottom: 8px;
+      font-size: 15px;
+    }
+    
+    .projects-section {
+      background: white;
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+    
+    .projects-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+    
+    .projects-header h3 {
+      color: #333;
+      font-size: 24px;
+      margin: 0;
+      font-weight: 700;
+    }
+    
+    .language-toggle {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 1500;
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+      overflow: hidden;
+      display: flex;
+    }
+    
+    .language-btn {
+      padding: 10px 16px;
+      border: none;
+      background: white;
+      color: #666;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 600;
+      transition: all 0.2s ease;
+      font-family: inherit;
+    }
+    
+    .language-btn:hover {
+      background: #f5f5f5;
+    }
+    
+    .language-btn.active {
+      background: #667eea;
+      color: white;
+    }
+    
+    .filters {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    
+    .filter-select {
+      padding: 10px 16px;
+      border: 2px solid #e0e0e0;
+      border-radius: 8px;
+      font-size: 14px;
+      color: #555;
+      background: white;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-family: inherit;
+    }
+    
+    .filter-select:hover {
+      border-color: #667eea;
+    }
+    
+    .filter-select:focus {
+      outline: none;
+      border-color: #667eea;
+      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    }
+    
+    .add-project-btn {
+      padding: 10px 20px;
+      background: #667eea;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-family: inherit;
+    }
+    
+    .add-project-btn:hover {
+      background: #5568d3;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+    }
+    
+    .projects-table-wrapper {
+      overflow-x: auto;
+      border-radius: 12px;
+      border: 1px solid #e0e0e0;
+    }
+    
+    .projects-table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 1400px;
+    }
+    
+    .projects-table thead {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+    }
+    
+    .projects-table th {
+      padding: 16px 12px;
+      text-align: left;
+      font-weight: 600;
+      font-size: 13px;
+      white-space: nowrap;
+    }
+    
+    .projects-table td {
+      padding: 16px 12px;
+      border-bottom: 1px solid #f0f0f0;
+      font-size: 13px;
+      color: #444;
+    }
+    
+    .projects-table tbody tr {
+      transition: background 0.2s ease;
+    }
+    
+    .projects-table tbody tr:hover {
+      background: #f8f9ff;
+    }
+    
+    .project-name {
+      font-weight: 600;
+      color: #667eea;
+      max-width: 200px;
+    }
+    
+    .project-id {
+      display: block;
+      font-size: 11px;
+      color: #888;
+      margin-top: 4px;
+    }
+    
+    .status-badge {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 12px;
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+    
+    .status-active {
+      background: #d4edda;
+      color: #155724;
+    }
+    
+    .status-hold {
+      background: #fff3cd;
+      color: #856404;
+    }
+    
+    .risk-badge {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 12px;
+      font-size: 11px;
+      font-weight: 600;
+    }
+    
+    .risk-low {
+      background: #d4edda;
+      color: #155724;
+    }
+    
+    .risk-medium {
+      background: #fff3cd;
+      color: #856404;
+    }
+    
+    .risk-high {
+      background: #f8d7da;
+      color: #721c24;
+    }
+    
+    .actions {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+    
+    .action-btn {
+      padding: 6px 10px;
+      border: none;
+      border-radius: 6px;
+      font-size: 11px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-family: inherit;
+      font-weight: 500;
+    }
+    
+    .action-btn.primary {
+      background: #667eea;
+      color: white;
+    }
+    
+    .action-btn.primary:hover {
+      background: #5568d3;
+      transform: translateY(-2px);
+    }
+    
+    .action-btn.secondary {
+      background: #f0f0f0;
+      color: #555;
+    }
+    
+    .action-btn.secondary:hover {
+      background: #e0e0e0;
+    }
+    
+    .action-btn.danger {
+      background: #dc3545;
+      color: white;
+    }
+    
+    .action-btn.danger:hover {
+      background: #c82333;
+    }
+    
+    .action-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+    
+    /* Modal styles */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.5);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+    }
+    
+    .modal-overlay.active {
+      display: flex;
+    }
+    
+    .modal {
+      background: white;
+      border-radius: 16px;
+      padding: 32px;
+      max-width: 700px;
+      width: 90%;
+      max-height: 90%;
+      overflow-y: auto;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+    }
+    
+    .modal h2 {
+      margin: 0 0 24px 0;
+      color: #333;
+      font-size: 24px;
+    }
+    
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+    
+    .form-group {
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .form-group.full-width {
+      grid-column: 1 / -1;
+    }
+    
+    .form-group label {
+      margin-bottom: 6px;
+      font-weight: 600;
+      color: #555;
+      font-size: 13px;
+    }
+    
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      padding: 10px 12px;
+      border: 2px solid #e0e0e0;
+      border-radius: 8px;
+      font-size: 14px;
+      font-family: inherit;
+      transition: all 0.2s ease;
+    }
+    
+    .form-group textarea {
+      resize: vertical;
+      min-height: 60px;
+    }
+    
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+      outline: none;
+      border-color: #667eea;
+      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    }
+    
+    .modal-actions {
+      display: flex;
+      gap: 12px;
+      justify-content: flex-end;
+    }
+    
+    .btn {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-family: inherit;
+    }
+    
+    .btn-primary {
+      background: #667eea;
+      color: white;
+    }
+    
+    .btn-primary:hover:not(:disabled) {
+      background: #5568d3;
+      transform: translateY(-2px);
+    }
+    
+    .btn-secondary {
+      background: #e0e0e0;
+      color: #555;
+    }
+    
+    .btn-secondary:hover {
+      background: #d0d0d0;
+    }
+    
+    .btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+    
+    .empty-state {
+      text-align: center;
+      padding: 60px 20px;
+      color: #888;
+    }
+    
+    .empty-state-icon {
+      font-size: 64px;
+      margin-bottom: 16px;
+    }
+    
+    .empty-state h3 {
+      font-size: 20px;
+      margin: 0 0 8px 0;
+      color: #666;
+    }
+    
+    .empty-state p {
+      font-size: 14px;
+      margin: 0;
+    }
+    
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: #667eea;
+      color: white;
+      padding: 16px 24px;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      display: none;
+      z-index: 2000;
+      animation: slideIn 0.3s ease;
+    }
+    
+    .toast.show {
+      display: block;
+    }
+    
+    .toast.error {
+      background: #dc3545;
+    }
+    
+    .toast.success {
+      background: #28a745;
+    }
+    
+    @keyframes slideIn {
+      from {
+        transform: translateX(400px);
+        opacity: 0;
+      }
+      to {
+        transform: translateX(0);
+        opacity: 1;
+      }
+    }
+    
+    .bg-orange { background: linear-gradient(135deg, #ff6b6b 0%, #ff8e53 100%); }
+    .bg-yellow { background: linear-gradient(135deg, #ffd93d 0%, #ffb700 100%); }
+    .bg-green-light { background: linear-gradient(135deg, #6bcf7f 0%, #4caf50 100%); }
+    .bg-blue { background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); }
+    .bg-turquoise { background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); }
+    .bg-green { background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%); }
+    .bg-pink { background: linear-gradient(135deg, #fa709a 0%, #fee140 100%); }
+    
+    .color-orange { color: #ff6b6b; }
+    .color-yellow { color: #ffa500; }
+    .color-green-light { color: #4caf50; }
+    .color-blue { color: #4facfe; }
+    .color-turquoise { color: #38f9d7; }
+    .color-green { color: #11998e; }
+    .color-pink { color: #fa709a; }
+    
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+    
+    ::-webkit-scrollbar-track {
+      background: #f1f1f1;
+    }
+    
+    ::-webkit-scrollbar-thumb {
+      background: #888;
+      border-radius: 4px;
+    }
+    
+    ::-webkit-scrollbar-thumb:hover {
+      background: #555;
+    }
+  </style>
+  <style>@view-transition { navigation: auto; }</style>
+  <script src="https://cdn.tailwindcss.com" type="text/javascript"></script>
+ </head>
+ <body><!-- Language Toggle -->
+  <div class="language-toggle"><button class="language-btn active" id="langEn" data-lang="en">EN</button> <button class="language-btn" id="langRu" data-lang="ru">RU</button>
+  </div>
+  <div class="container">
+   <div class="sidebar">
+    <div class="header">
+     <h1 id="mainTitle">Project Management Information Systems</h1>
+    </div>
+    <div class="modules">
+     <div class="module" data-module="scope">
+      <div class="module-header bg-orange"><span id="scopeLabel">Project Scope Management</span> <span class="module-icon">▶</span>
+      </div>
+      <div class="module-content">
+       <div class="module-item color-orange" data-item="initiation">
+        Initiation
+       </div>
+       <div class="module-item color-orange" data-item="scope-planning">
+        Scope Planning
+       </div>
+       <div class="module-item color-orange" data-item="scope-definition">
+        Scope Definition
+       </div>
+       <div class="module-item color-orange" data-item="scope-verification">
+        Scope Verification
+       </div>
+       <div class="module-item color-orange" data-item="scope-change">
+        Scope Change Control
+       </div>
+      </div>
+     </div>
+     <div class="module" data-module="time">
+      <div class="module-header bg-yellow"><span id="timeLabel">Project Time Management</span> <span class="module-icon">▶</span>
+      </div>
+      <div class="module-content">
+       <div class="module-item color-yellow" data-item="activity-definition">
+        Activity Definition &amp; WBS
+       </div>
+       <div class="module-item color-yellow" data-item="activity-sequencing">
+        Activity Sequencing
+       </div>
+       <div class="module-item color-yellow" data-item="duration-estimating">
+        Activity Duration Estimating
+       </div>
+       <div class="module-item color-yellow" data-item="schedule-development">
+        Schedule Development
+       </div>
+       <div class="module-item color-yellow" data-item="schedule-control">
+        Schedule Control
+       </div>
+      </div>
+     </div>
+     <div class="module" data-module="cost">
+      <div class="module-header bg-green-light"><span id="costLabel">Project Cost Management</span> <span class="module-icon">▶</span>
+      </div>
+      <div class="module-content">
+       <div class="module-item color-green-light" data-item="resource-planning">
+        Resource Planning
+       </div>
+       <div class="module-item color-green-light" data-item="cost-estimating">
+        Cost Estimating
+       </div>
+       <div class="module-item color-green-light" data-item="cost-budgeting">
+        Cost Budgeting
+       </div>
+       <div class="module-item color-green-light" data-item="cost-control">
+        Cost Control
+       </div>
+      </div>
+     </div>
+     <div class="module" data-module="quality">
+      <div class="module-header bg-blue"><span id="qualityLabel">Project Quality Management</span> <span class="module-icon">▶</span>
+      </div>
+      <div class="module-content">
+       <div class="module-item color-blue" data-item="quality-planning">
+        Quality Planning
+       </div>
+       <div class="module-item color-blue" data-item="quality-assurance">
+        Quality Assurance
+       </div>
+       <div class="module-item color-blue" data-item="quality-control">
+        Quality Control
+       </div>
+      </div>
+     </div>
+     <div class="module" data-module="hr">
+      <div class="module-header bg-turquoise"><span id="hrLabel">Project Human Resource Management</span> <span class="module-icon">▶</span>
+      </div>
+      <div class="module-content">
+       <div class="module-item color-turquoise" data-item="org-planning">
+        Organizational Planning
+       </div>
+       <div class="module-item color-turquoise" data-item="staff-acquisition">
+        Staff Acquisition
+       </div>
+       <div class="module-item color-turquoise" data-item="team-development">
+        Team Development
+       </div>
+      </div>
+     </div>
+     <div class="module" data-module="contract">
+      <div class="module-header bg-green"><span id="contractLabel">Project Contract Management</span> <span class="module-icon">▶</span>
+      </div>
+      <div class="module-content">
+       <div class="module-item color-green" data-item="tendering">
+        Tendering
+       </div>
+       <div class="module-item color-green" data-item="analysis">
+        Analysis
+       </div>
+       <div class="module-item color-green" data-item="negotiation">
+        Negotiation
+       </div>
+       <div class="module-item color-green" data-item="recommendation">
+        Recommendation &amp; Selection
+       </div>
+       <div class="module-item color-green" data-item="contract-admin">
+        Contract Administration
+       </div>
+       <div class="module-item color-green" data-item="contract-closeout">
+        Contract Closeout
+       </div>
+      </div>
+     </div>
+     <div class="module" data-module="risk">
+      <div class="module-header bg-pink"><span id="riskLabel">Project Risk Management</span> <span class="module-icon">▶</span>
+      </div>
+      <div class="module-content">
+       <div class="module-item color-pink" data-item="risk-planning">
+        Risk Management Planning
+       </div>
+       <div class="module-item color-pink" data-item="risk-identification">
+        Risk Identification
+       </div>
+       <div class="module-item color-pink" data-item="qualitative-analysis">
+        Qualitative Risk Analysis
+       </div>
+       <div class="module-item color-pink" data-item="quantitative-analysis">
+        Quantitative Risk Analysis
+       </div>
+       <div class="module-item color-pink" data-item="risk-response">
+        Risk Response Planning
+       </div>
+       <div class="module-item color-pink" data-item="risk-monitoring">
+        Risk Monitoring &amp; Control
+       </div>
+      </div>
+     </div>
+    </div>
+   </div>
+   <div class="main-content">
+    <div class="dashboard">
+     <div class="scope-section">
+      <h2 id="scopeTitle">General Program Scope</h2>
+      <p id="scopeDesc1">Planning, execution and monitoring for IFI projects (ESIA/FS/DED/Supervision) with WB/ADB/FIDIC alignment.</p>
+      <p><strong id="scopeObjectives">Key Objectives:</strong></p>
+      <ul>
+       <li id="objective1">Transparency over deliverables, time and costs</li>
+       <li id="objective2">Focus/timesheet integration → deliverable progress</li>
+       <li id="objective3">AI alerts for delays, risks and VOs</li>
+       <li id="objective4">Fast reports for PM/CEO</li>
+      </ul>
+     </div><!-- SCOPE MANAGEMENT DETAIL SECTION -->
+     <div class="scope-management-section" id="scopeManagementSection">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+       <h2 style="color: #667eea; font-size: 28px; margin: 0; font-weight: 700;">📋 Project Scope Management</h2><button id="backToProjectsBtn" class="btn btn-secondary">← Back to Projects</button>
+      </div><!-- Project Information Form -->
+      <div style="background: #f8f9ff; padding: 20px; border-radius: 12px; margin-bottom: 24px;">
+       <h3 style="font-size: 18px; font-weight: 700; margin: 0 0 16px 0; color: #333;">Project Information</h3>
+       <form id="scopeProjectForm">
+        <div class="scope-grid">
+         <div class="scope-input-group"><label for="scopeProjId">Project ID</label> <input type="text" id="scopeProjId" class="scope-input" placeholder="e.g., PRJ-2025-01" readonly>
+         </div>
+         <div class="scope-input-group"><label for="scopeProjName">Project Name</label> <input type="text" id="scopeProjName" class="scope-input" readonly>
+         </div>
+         <div class="scope-input-group"><label for="scopeClient">Client / Beneficiary</label> <input type="text" id="scopeClient" class="scope-input" readonly>
+         </div>
+         <div class="scope-input-group"><label for="scopeStage">Stage</label> <input type="text" id="scopeStage" class="scope-input" readonly>
+         </div>
+         <div class="scope-input-group"><label for="scopeCountry">Country</label> <input type="text" id="scopeCountry" class="scope-input" readonly>
+         </div>
+         <div class="scope-input-group"><label for="scopeBudget">Budget (€)</label> <input type="text" id="scopeBudget" class="scope-input" readonly>
+         </div>
+         <div class="scope-input-group"><label for="scopeTor">ToR Link</label> <input type="text" id="scopeTor" class="scope-input" placeholder="Link to ToR document">
+         </div>
+         <div class="scope-input-group"><label for="scopeContractLink">Contract Link</label> <input type="text" id="scopeContractLink" class="scope-input" placeholder="Link to contract document">
+         </div>
+        </div>
+        <div class="scope-actions"><button type="submit" class="btn btn-primary">Save Links</button>
+        </div>
+       </form>
+      </div><!-- Scope Management Tabs -->
+      <div class="scope-tabs"><button class="scope-tab-btn active" data-scope-tab="initiation">Initiation</button> <button class="scope-tab-btn" data-scope-tab="planning">Scope Planning</button> <button class="scope-tab-btn" data-scope-tab="definition">Scope Definition</button> <button class="scope-tab-btn" data-scope-tab="verification">Scope Verification</button> <button class="scope-tab-btn" data-scope-tab="changes">Scope Change Control</button> <button class="scope-tab-btn" data-scope-tab="ai">🧠 AI Assistant</button>
+      </div><!-- Tab Content: Initiation -->
+      <div class="scope-tab-content active" id="tab-initiation">
+       <h3 style="font-size: 18px; font-weight: 700; margin: 0 0 8px 0; color: #333;">Project Initiation</h3>
+       <p style="color: #64748b; font-size: 14px; margin: 0 0 16px 0;">Define project purpose, approvals, and key stakeholders.</p>
+       <form id="initiationForm">
+        <div class="scope-input-group"><label for="initiationText">Initiation Summary</label> <textarea id="initiationText" class="scope-input scope-textarea" placeholder="Enter initiation summary or notes..." rows="6"></textarea>
+        </div>
+        <div class="scope-actions"><button type="submit" class="btn btn-primary">Save Initiation</button>
+        </div>
+       </form>
+      </div><!-- Tab Content: Scope Planning -->
+      <div class="scope-tab-content" id="tab-planning">
+       <h3 style="font-size: 18px; font-weight: 700; margin: 0 0 8px 0; color: #333;">Scope Planning</h3>
+       <p style="color: #64748b; font-size: 14px; margin: 0 0 16px 0;">Define how scope will be planned, verified, and controlled.</p>
+       <form id="planningForm">
+        <div class="scope-input-group"><label for="planningText">Planning Approach</label> <textarea id="planningText" class="scope-input scope-textarea" placeholder="Add planning approach, methods, etc." rows="6"></textarea>
+        </div>
+        <div class="scope-actions"><button type="submit" class="btn btn-primary">Save Planning</button>
+        </div>
+       </form>
+      </div><!-- Tab Content: Scope Definition -->
+      <div class="scope-tab-content" id="tab-definition">
+       <h3 style="font-size: 18px; font-weight: 700; margin: 0 0 8px 0; color: #333;">Scope Definition</h3>
+       <p style="color: #64748b; font-size: 14px; margin: 0 0 16px 0;">Break down the scope into deliverables (WBS).</p>
+       <form id="definitionForm" style="display: grid; grid-template-columns: repeat(6, 1fr); gap: 12px; margin-bottom: 20px;">
+        <div style="grid-column: span 1;"><input type="text" id="delivWbs" class="scope-input" placeholder="WBS (e.g. 2.1)" style="padding: 8px 10px;">
+        </div>
+        <div style="grid-column: span 2;"><input type="text" id="delivName" class="scope-input" placeholder="Deliverable Name" style="padding: 8px 10px;">
+        </div>
+        <div style="grid-column: span 1;"><input type="text" id="delivResponsible" class="scope-input" placeholder="Responsible" style="padding: 8px 10px;">
+        </div>
+        <div style="grid-column: span 1;"><select id="delivStatus" class="scope-input" style="padding: 8px 10px;"> <option>Not started</option> <option>In progress</option> <option>Submitted</option> <option>Accepted</option> </select>
+        </div>
+        <div style="grid-column: span 1;"><input type="text" id="delivLink" class="scope-input" placeholder="Link (local / online)" style="padding: 8px 10px;">
+        </div>
+        <div style="grid-column: span 6;"><textarea id="delivDone" class="scope-input" placeholder="Criteria of Done" rows="2" style="padding: 8px 10px;"></textarea>
+        </div>
+        <div style="grid-column: span 6;"><button type="submit" class="btn btn-primary" style="width: 100%; background: #10b981;">Add Deliverable</button>
+        </div>
+       </form>
+       <div style="overflow-x: auto; border: 1px solid #e0e0e0; border-radius: 8px;">
+        <table style="width: 100%; border-collapse: collapse; font-size: 13px;">
+         <thead style="background: #f8fafc; color: #475569;">
+          <tr>
+           <th style="padding: 12px; text-align: left; font-weight: 600; border-bottom: 2px solid #e2e8f0;">WBS</th>
+           <th style="padding: 12px; text-align: left; font-weight: 600; border-bottom: 2px solid #e2e8f0;">Deliverable</th>
+           <th style="padding: 12px; text-align: left; font-weight: 600; border-bottom: 2px solid #e2e8f0;">Responsible</th>
+           <th style="padding: 12px; text-align: left; font-weight: 600; border-bottom: 2px solid #e2e8f0;">Status</th>
+           <th style="padding: 12px; text-align: left; font-weight: 600; border-bottom: 2px solid #e2e8f0;">Link</th>
+           <th style="padding: 12px; text-align: left; font-weight: 600; border-bottom: 2px solid #e2e8f0;">Done</th>
+          </tr>
+         </thead>
+         <tbody id="tblDeliv"></tbody>
+        </table>
+       </div>
+      </div><!-- Tab Content: Scope Verification -->
+      <div class="scope-tab-content" id="tab-verification">
+       <h3 style="font-size: 18px; font-weight: 700; margin: 0 0 8px 0; color: #333;">Scope Verification</h3>
+       <p style="color: #64748b; font-size: 14px; margin: 0 0 16px 0;">Ensure deliverables meet ToR and client requirements.</p>
+       <form id="verificationForm">
+        <div class="scope-input-group"><label for="verifyText">Verification Notes</label> <textarea id="verifyText" class="scope-input scope-textarea" placeholder="Verification notes, acceptance summary, etc." rows="6"></textarea>
+        </div>
+        <div class="scope-actions"><button type="submit" class="btn btn-primary">Save Verification</button>
+        </div>
+       </form>
+      </div><!-- Tab Content: Scope Change Control -->
+      <div class="scope-tab-content" id="tab-changes">
+       <h3 style="font-size: 18px; font-weight: 700; margin: 0 0 8px 0; color: #333;">Scope Change Control</h3>
+       <p style="color: #64748b; font-size: 14px; margin: 0 0 16px 0;">Log and monitor scope changes / variation orders.</p>
+       <form id="changesForm" style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; margin-bottom: 20px;">
+        <div style="grid-column: span 1;"><input type="text" id="changeId" class="scope-input" placeholder="Change ID (VO-01)" style="padding: 8px 10px;">
+        </div>
+        <div style="grid-column: span 2;"><input type="text" id="changeDesc" class="scope-input" placeholder="Description" style="padding: 8px 10px;">
+        </div>
+        <div style="grid-column: span 1;"><input type="text" id="changeImpact" class="scope-input" placeholder="+Days / +Cost%" style="padding: 8px 10px;">
+        </div>
+        <div style="grid-column: span 1;"><select id="changeStatus" class="scope-input" style="padding: 8px 10px;"> <option>Proposed</option> <option>Approved</option> <option>Rejected</option> </select>
+        </div>
+        <div style="grid-column: span 5;"><button type="submit" class="btn btn-primary" style="width: 100%; background: #10b981;">Add Change Request</button>
+        </div>
+       </form>
+       <div style="overflow-x: auto; border: 1px solid #e0e0e0; border-radius: 8px;">
+        <table style="width: 100%; border-collapse: collapse; font-size: 13px;">
+         <thead style="background: #f8fafc; color: #475569;">
+          <tr>
+           <th style="padding: 12px; text-align: left; font-weight: 600; border-bottom: 2px solid #e2e8f0;">ID</th>
+           <th style="padding: 12px; text-align: left; font-weight: 600; border-bottom: 2px solid #e2e8f0;">Description</th>
+           <th style="padding: 12px; text-align: left; font-weight: 600; border-bottom: 2px solid #e2e8f0;">Impact</th>
+           <th style="padding: 12px; text-align: left; font-weight: 600; border-bottom: 2px solid #e2e8f0;">Status</th>
+          </tr>
+         </thead>
+         <tbody id="tblChange"></tbody>
+        </table>
+       </div>
+      </div><!-- Tab Content: AI Assistant -->
+      <div class="scope-tab-content" id="tab-ai">
+       <h3 style="font-size: 18px; font-weight: 700; margin: 0 0 8px 0; color: #333;">🧠 AI Assistant (Manual Mode)</h3>
+       <p style="color: #64748b; font-size: 14px; margin: 0 0 16px 0;">Write your prompt here → copy to GPT/DeepSeek → paste the AI response below.</p>
+       <form id="aiForm">
+        <div class="scope-input-group"><label for="aiPrompt">AI Prompt</label> <textarea id="aiPrompt" class="scope-input scope-textarea" placeholder="Ex: Analyze deliverables vs ToR and highlight missing sections..." rows="4"></textarea>
+        </div>
+        <div class="scope-input-group"><label for="aiResponse">AI Response</label> <textarea id="aiResponse" class="scope-input scope-textarea" placeholder="Paste aici răspunsul AI (rezumat, scor, etc.)" rows="6"></textarea>
+        </div>
+        <div class="scope-actions"><button type="submit" class="btn btn-primary" style="background: #6366f1;">💾 Save AI Analysis</button> <button type="button" id="copyPromptBtn" class="btn btn-secondary">📋 Copy Prompt</button>
+        </div>
+       </form><!-- AI Analysis History -->
+       <div style="margin-top: 32px;">
+        <h4 style="font-size: 16px; font-weight: 600; margin: 0 0 12px 0; color: #333;">📚 AI Analysis History</h4>
+        <div id="aiHistory" style="display: flex; flex-direction: column; gap: 12px;"></div>
+       </div>
+      </div>
+     </div>
+     <div class="projects-section">
+      <div class="projects-header">
+       <h3>Project List / Список Проектов</h3>
+       <div class="filters"><label for="filterCountry" style="display: none;">Filter by Country</label> <select id="filterCountry" class="filter-select"> <option value="">All Countries</option> <option value="kyrgyzstan">Kyrgyzstan</option> <option value="uzbekistan">Uzbekistan</option> <option value="tajikistan">Tajikistan</option> </select> <label for="filterStatus" style="display: none;">Filter by Status</label> <select id="filterStatus" class="filter-select"> <option value="">All Status</option> <option value="active">Active</option> <option value="hold">On Hold</option> </select> <label for="filterRisk" style="display: none;">Filter by Risk</label> <select id="filterRisk" class="filter-select"> <option value="">All Risk Levels</option> <option value="low">Low</option> <option value="medium">Medium</option> <option value="high">High</option> </select> <button class="add-project-btn" id="addProjectBtn">+ Add Project</button>
+       </div>
+      </div>
+      <div class="projects-table-wrapper">
+       <table class="projects-table">
+        <thead>
+         <tr>
+          <th>Project / Проект</th>
+          <th>Sector / Сектор</th>
+          <th>Beneficiary/PCU / Бенефициар</th>
+          <th>Client/Donor / Клиент</th>
+          <th>Lead / Руководитель</th>
+          <th>Sub-consultants / Субконсультанты</th>
+          <th>Type &amp; Status / Тип и Статус</th>
+          <th>Contract / Контракт</th>
+          <th>Period / Период</th>
+          <th>Risk / Риск</th>
+          <th>Next Milestone / След. Этап</th>
+          <th>Actions / Действия</th>
+         </tr>
+        </thead>
+        <tbody id="projectsTableBody">
+        </tbody>
+       </table>
+      </div>
+     </div>
+    </div>
+   </div>
+  </div><!-- Add/Edit Project Modal -->
+  <div class="modal-overlay" id="projectModal">
+   <div class="modal">
+    <h2 id="modalTitle">Add New Project / Добавить Проект</h2>
+    <form id="projectForm">
+     <div class="form-grid">
+      <div class="form-group"><label for="projectId">Project ID / ID Проекта *</label> <input type="text" id="projectId" required>
+      </div>
+      <div class="form-group"><label for="projectName">Project Name / Название Проекта *</label> <input type="text" id="projectName" required>
+      </div>
+      <div class="form-group"><label for="sector">Sector / Сектор *</label> <input type="text" id="sector" required>
+      </div>
+      <div class="form-group"><label for="beneficiary">Beneficiary/PCU / Бенефициар *</label> <input type="text" id="beneficiary" required>
+      </div>
+      <div class="form-group"><label for="client">Client/Donor / Клиент *</label> <input type="text" id="client" required>
+      </div>
+      <div class="form-group"><label for="lead">Lead / Руководитель *</label> <input type="text" id="lead" required>
+      </div>
+      <div class="form-group full-width"><label for="subconsultants">Sub-consultants / Субконсультанты</label> <input type="text" id="subconsultants" placeholder="e.g., CAICO (local), HydroConsult">
+      </div>
+      <div class="form-group"><label for="type">Type / Тип *</label> <select id="type" required> <option value="">Select type / Выберите тип</option> <option value="ESIA">ESIA</option> <option value="FS">FS</option> <option value="DED">DED</option> <option value="Supervision">Supervision</option> </select>
+      </div>
+      <div class="form-group"><label for="status">Status / Статус *</label> <select id="status" required> <option value="">Select status / Выберите статус</option> <option value="active">Active / Активный</option> <option value="hold">On Hold / Приостановлен</option> </select>
+      </div>
+      <div class="form-group"><label for="contractType">Contract Type / Тип Контракта *</label> <select id="contractType" required> <option value="">Select contract type / Выберите тип</option> <option value="Lump-sum">Lump-sum / Паушальный</option> <option value="Time-based">Time-based / Повременной</option> </select>
+      </div>
+      <div class="form-group"><label for="contractValue">Contract Value / Стоимость *</label> <input type="text" id="contractValue" placeholder="e.g., ~€3.45M" required>
+      </div>
+      <div class="form-group"><label for="periodStart">Period Start / Начало *</label> <input type="text" id="periodStart" placeholder="e.g., Oct 2024" required>
+      </div>
+      <div class="form-group"><label for="periodEnd">Period End / Конец *</label> <input type="text" id="periodEnd" placeholder="e.g., Jun 2025" required>
+      </div>
+      <div class="form-group"><label for="risk">Risk Level / Уровень Риска *</label> <select id="risk" required> <option value="">Select risk level / Выберите уровень</option> <option value="low">Low / Низкий</option> <option value="medium">Medium / Средний</option> <option value="high">High / Высокий</option> </select>
+      </div>
+      <div class="form-group"><label for="country">Country / Страна *</label> <select id="country" required> <option value="">Select country / Выберите страну</option> <option value="kyrgyzstan">Kyrgyzstan / Кыргызстан</option> <option value="uzbekistan">Uzbekistan / Узбекистан</option> <option value="tajikistan">Tajikistan / Таджикистан</option> </select>
+      </div>
+      <div class="form-group"><label for="milestoneName">Next Milestone / След. Этап</label> <input type="text" id="milestoneName" placeholder="e.g., Scoping">
+      </div>
+      <div class="form-group"><label for="milestoneDate">Milestone Date / Дата Этапа</label> <input type="text" id="milestoneDate" placeholder="e.g., Dec 2024">
+      </div>
+     </div>
+     <div class="modal-actions"><button type="button" class="btn btn-secondary" id="cancelBtn">Cancel / Отмена</button> <button type="submit" class="btn btn-primary" id="saveBtn">Save Project / Сохранить</button>
+     </div>
+    </form>
+   </div>
+  </div><!-- Toast notification -->
+  <div class="toast" id="toast"></div>
+  <script>
+    let allProjects = [];
+    let editingProject = null;
+    let currentLanguage = 'en';
+    
+    const translations = {
+      en: {
+        scopeTitle: "General Program Scope",
+        scopeDesc1: "Planning, execution and monitoring for IFI projects (ESIA/FS/DED/Supervision) with WB/ADB/FIDIC alignment.",
+        scopeObjectives: "Key Objectives:",
+        objective1: "Transparency over deliverables, time and costs",
+        objective2: "Focus/timesheet integration → deliverable progress",
+        objective3: "AI alerts for delays, risks and VOs",
+        objective4: "Fast reports for PM/CEO",
+        projectListTitle: "Project List",
+        allCountries: "All Countries",
+        allStatus: "All Status",
+        allRiskLevels: "All Risk Levels",
+        addProjectBtn: "+ Add Project",
+        tableProject: "Project",
+        tableSector: "Sector",
+        tableBeneficiary: "Beneficiary/PCU",
+        tableClient: "Client/Donor",
+        tableLead: "Lead",
+        tableSubconsultants: "Sub-consultants",
+        tableType: "Type & Status",
+        tableContract: "Contract",
+        tablePeriod: "Period",
+        tableRisk: "Risk",
+        tableMilestone: "Next Milestone",
+        tableActions: "Actions",
+        btnOpen: "Open",
+        btnContract: "Contract",
+        btnCalendar: "Calendar",
+        btnEdit: "Edit",
+        btnDelete: "Delete",
+        emptyStateTitle: "No projects yet",
+        emptyStateDesc: 'Click "Add Project" to create your first project',
+        modalTitleAdd: "Add New Project",
+        modalTitleEdit: "Edit Project",
+        projectId: "Project ID",
+        projectName: "Project Name",
+        sector: "Sector",
+        beneficiary: "Beneficiary/PCU",
+        client: "Client/Donor",
+        lead: "Lead",
+        subconsultants: "Sub-consultants",
+        type: "Type",
+        status: "Status",
+        contractType: "Contract Type",
+        contractValue: "Contract Value",
+        periodStart: "Period Start",
+        periodEnd: "Period End",
+        risk: "Risk Level",
+        country: "Country",
+        milestoneName: "Next Milestone",
+        milestoneDate: "Milestone Date",
+        btnCancel: "Cancel",
+        btnSave: "Save Project",
+        selectType: "Select type",
+        selectStatus: "Select status",
+        selectContractType: "Select contract type",
+        selectRiskLevel: "Select risk level",
+        selectCountry: "Select country",
+        statusActive: "Active",
+        statusHold: "On Hold",
+        contractLumpsum: "Lump-sum",
+        contractTimebased: "Time-based",
+        riskLow: "Low",
+        riskMedium: "Medium",
+        riskHigh: "High",
+        countryKyrgyzstan: "Kyrgyzstan",
+        countryUzbekistan: "Uzbekistan",
+        countryTajikistan: "Tajikistan"
+      },
+      ru: {
+        scopeTitle: "Общий Объем Программы",
+        scopeDesc1: "Планирование, исполнение и мониторинг проектов МФИ (ОВОС/ТЭО/ПД/Надзор) с согласованием ВБ/АБР/ФИДИК.",
+        scopeObjectives: "Ключевые Цели:",
+        objective1: "Прозрачность результатов, времени и затрат",
+        objective2: "Интеграция табелей → прогресс результатов",
+        objective3: "AI-уведомления о задержках, рисках и ДР",
+        objective4: "Быстрые отчеты для PM/CEO",
+        projectListTitle: "Список Проектов",
+        allCountries: "Все Страны",
+        allStatus: "Все Статусы",
+        allRiskLevels: "Все Уровни Риска",
+        addProjectBtn: "+ Добавить Проект",
+        tableProject: "Проект",
+        tableSector: "Сектор",
+        tableBeneficiary: "Бенефициар",
+        tableClient: "Клиент",
+        tableLead: "Руководитель",
+        tableSubconsultants: "Субконсультанты",
+        tableType: "Тип и Статус",
+        tableContract: "Контракт",
+        tablePeriod: "Период",
+        tableRisk: "Риск",
+        tableMilestone: "След. Этап",
+        tableActions: "Действия",
+        btnOpen: "Открыть",
+        btnContract: "Контракт",
+        btnCalendar: "Календарь",
+        btnEdit: "Изменить",
+        btnDelete: "Удалить",
+        emptyStateTitle: "Проектов пока нет",
+        emptyStateDesc: 'Нажмите "Добавить Проект" чтобы создать проект',
+        modalTitleAdd: "Добавить Проект",
+        modalTitleEdit: "Редактировать Проект",
+        projectId: "ID Проекта",
+        projectName: "Название Проекта",
+        sector: "Сектор",
+        beneficiary: "Бенефициар",
+        client: "Клиент",
+        lead: "Руководитель",
+        subconsultants: "Субконсультанты",
+        type: "Тип",
+        status: "Статус",
+        contractType: "Тип Контракта",
+        contractValue: "Стоимость",
+        periodStart: "Начало",
+        periodEnd: "Конец",
+        risk: "Уровень Риска",
+        country: "Страна",
+        milestoneName: "След. Этап",
+        milestoneDate: "Дата Этапа",
+        btnCancel: "Отмена",
+        btnSave: "Сохранить",
+        selectType: "Выберите тип",
+        selectStatus: "Выберите статус",
+        selectContractType: "Выберите тип",
+        selectRiskLevel: "Выберите уровень",
+        selectCountry: "Выберите страну",
+        statusActive: "Активный",
+        statusHold: "Приостановлен",
+        contractLumpsum: "Паушальный",
+        contractTimebased: "Повременной",
+        riskLow: "Низкий",
+        riskMedium: "Средний",
+        riskHigh: "Высокий",
+        countryKyrgyzstan: "Кыргызстан",
+        countryUzbekistan: "Узбекистан",
+        countryTajikistan: "Таджикистан"
+      }
+    };
+    
+    function switchLanguage(lang) {
+      currentLanguage = lang;
+      const t = translations[lang];
+      
+      // Update language buttons
+      document.getElementById('langEn').classList.toggle('active', lang === 'en');
+      document.getElementById('langRu').classList.toggle('active', lang === 'ru');
+      
+      // Update scope section
+      document.getElementById('scopeTitle').textContent = t.scopeTitle;
+      document.getElementById('scopeDesc1').textContent = t.scopeDesc1;
+      document.getElementById('scopeObjectives').textContent = t.scopeObjectives;
+      document.getElementById('objective1').textContent = t.objective1;
+      document.getElementById('objective2').textContent = t.objective2;
+      document.getElementById('objective3').textContent = t.objective3;
+      document.getElementById('objective4').textContent = t.objective4;
+      
+      // Update projects section
+      document.querySelector('.projects-header h3').textContent = t.projectListTitle;
+      document.getElementById('addProjectBtn').textContent = t.addProjectBtn;
+      
+      // Update filter dropdowns
+      const filterCountry = document.getElementById('filterCountry');
+      filterCountry.options[0].text = t.allCountries;
+      filterCountry.options[1].text = t.countryKyrgyzstan;
+      filterCountry.options[2].text = t.countryUzbekistan;
+      filterCountry.options[3].text = t.countryTajikistan;
+      
+      const filterStatus = document.getElementById('filterStatus');
+      filterStatus.options[0].text = t.allStatus;
+      filterStatus.options[1].text = t.statusActive;
+      filterStatus.options[2].text = t.statusHold;
+      
+      const filterRisk = document.getElementById('filterRisk');
+      filterRisk.options[0].text = t.allRiskLevels;
+      filterRisk.options[1].text = t.riskLow;
+      filterRisk.options[2].text = t.riskMedium;
+      filterRisk.options[3].text = t.riskHigh;
+      
+      // Update table headers
+      const headers = document.querySelectorAll('.projects-table thead th');
+      headers[0].textContent = t.tableProject;
+      headers[1].textContent = t.tableSector;
+      headers[2].textContent = t.tableBeneficiary;
+      headers[3].textContent = t.tableClient;
+      headers[4].textContent = t.tableLead;
+      headers[5].textContent = t.tableSubconsultants;
+      headers[6].textContent = t.tableType;
+      headers[7].textContent = t.tableContract;
+      headers[8].textContent = t.tablePeriod;
+      headers[9].textContent = t.tableRisk;
+      headers[10].textContent = t.tableMilestone;
+      headers[11].textContent = t.tableActions;
+      
+      // Update modal labels
+      const formLabels = {
+        projectId: t.projectId,
+        projectName: t.projectName,
+        sector: t.sector,
+        beneficiary: t.beneficiary,
+        client: t.client,
+        lead: t.lead,
+        subconsultants: t.subconsultants,
+        type: t.type,
+        status: t.status,
+        contractType: t.contractType,
+        contractValue: t.contractValue,
+        periodStart: t.periodStart,
+        periodEnd: t.periodEnd,
+        risk: t.risk,
+        country: t.country,
+        milestoneName: t.milestoneName,
+        milestoneDate: t.milestoneDate
+      };
+      
+      Object.keys(formLabels).forEach(key => {
+        const label = document.querySelector(`label[for="${key}"]`);
+        if (label) {
+          label.textContent = formLabels[key] + (label.textContent.includes('*') ? ' *' : '');
+        }
+      });
+      
+      // Update form select options
+      const typeSelect = document.getElementById('type');
+      typeSelect.options[0].text = t.selectType;
+      
+      const statusSelect = document.getElementById('status');
+      statusSelect.options[0].text = t.selectStatus;
+      statusSelect.options[1].text = t.statusActive;
+      statusSelect.options[2].text = t.statusHold;
+      
+      const contractTypeSelect = document.getElementById('contractType');
+      contractTypeSelect.options[0].text = t.selectContractType;
+      contractTypeSelect.options[1].text = t.contractLumpsum;
+      contractTypeSelect.options[2].text = t.contractTimebased;
+      
+      const riskSelect = document.getElementById('risk');
+      riskSelect.options[0].text = t.selectRiskLevel;
+      riskSelect.options[1].text = t.riskLow;
+      riskSelect.options[2].text = t.riskMedium;
+      riskSelect.options[3].text = t.riskHigh;
+      
+      const countrySelect = document.getElementById('country');
+      countrySelect.options[0].text = t.selectCountry;
+      countrySelect.options[1].text = t.countryKyrgyzstan;
+      countrySelect.options[2].text = t.countryUzbekistan;
+      countrySelect.options[3].text = t.countryTajikistan;
+      
+      // Update buttons
+      document.getElementById('cancelBtn').textContent = t.btnCancel;
+      document.getElementById('saveBtn').textContent = t.btnSave;
+      
+      // Re-render projects to update action buttons
+      renderProjects();
+    }
+    
+    const defaultConfig = {
+      main_title: "Project Management Information Systems",
+      scope_label: "Project Scope Management",
+      time_label: "Project Time Management",
+      cost_label: "Project Cost Management",
+      quality_label: "Project Quality Management",
+      hr_label: "Project Human Resource Management",
+      contract_label: "Project Contract Management",
+      risk_label: "Project Risk Management",
+      header_bg: "#667eea",
+      sidebar_bg: "#ffffff"
+    };
+
+    // Data SDK Handler
+    const dataHandler = {
+      onDataChanged(data) {
+        allProjects = data;
+        renderProjects();
+      }
+    };
+
+    // Initialize Data SDK
+    (async () => {
+      if (window.dataSdk) {
+        const result = await window.dataSdk.init(dataHandler);
+        if (!result.isOk) {
+          showToast('Failed to initialize data storage', 'error');
+        }
+      }
+    })();
+
+    async function onConfigChange(config) {
+      document.getElementById('mainTitle').textContent = config.main_title || defaultConfig.main_title;
+      document.getElementById('scopeLabel').textContent = config.scope_label || defaultConfig.scope_label;
+      document.getElementById('timeLabel').textContent = config.time_label || defaultConfig.time_label;
+      document.getElementById('costLabel').textContent = config.cost_label || defaultConfig.cost_label;
+      document.getElementById('qualityLabel').textContent = config.quality_label || defaultConfig.quality_label;
+      document.getElementById('hrLabel').textContent = config.hr_label || defaultConfig.hr_label;
+      document.getElementById('contractLabel').textContent = config.contract_label || defaultConfig.contract_label;
+      document.getElementById('riskLabel').textContent = config.risk_label || defaultConfig.risk_label;
+    }
+
+    function mapToCapabilities(config) {
+      return {
+        recolorables: [
+          {
+            get: () => config.header_bg || defaultConfig.header_bg,
+            set: (value) => {
+              config.header_bg = value;
+              if (window.elementSdk) {
+                window.elementSdk.setConfig({ header_bg: value });
+              }
+            }
+          },
+          {
+            get: () => config.sidebar_bg || defaultConfig.sidebar_bg,
+            set: (value) => {
+              config.sidebar_bg = value;
+              if (window.elementSdk) {
+                window.elementSdk.setConfig({ sidebar_bg: value });
+              }
+            }
+          }
+        ],
+        borderables: [],
+        fontEditable: undefined,
+        fontSizeable: undefined
+      };
+    }
+
+    function mapToEditPanelValues(config) {
+      return new Map([
+        ["main_title", config.main_title || defaultConfig.main_title],
+        ["scope_label", config.scope_label || defaultConfig.scope_label],
+        ["time_label", config.time_label || defaultConfig.time_label],
+        ["cost_label", config.cost_label || defaultConfig.cost_label],
+        ["quality_label", config.quality_label || defaultConfig.quality_label],
+        ["hr_label", config.hr_label || defaultConfig.hr_label],
+        ["contract_label", config.contract_label || defaultConfig.contract_label],
+        ["risk_label", config.risk_label || defaultConfig.risk_label]
+      ]);
+    }
+
+    if (window.elementSdk) {
+      window.elementSdk.init({
+        defaultConfig,
+        onConfigChange,
+        mapToCapabilities,
+        mapToEditPanelValues
+      });
+    }
+
+    function showToast(message, type = 'success') {
+      const toast = document.getElementById('toast');
+      toast.textContent = message;
+      toast.className = `toast show ${type}`;
+      setTimeout(() => {
+        toast.className = 'toast';
+      }, 3000);
+    }
+
+    function renderProjects() {
+      const tbody = document.getElementById('projectsTableBody');
+      const filterCountry = document.getElementById('filterCountry').value;
+      const filterStatus = document.getElementById('filterStatus').value;
+      const filterRisk = document.getElementById('filterRisk').value;
+      const t = translations[currentLanguage];
+      
+      const filteredProjects = allProjects.filter(project => {
+        const matchCountry = !filterCountry || project.country === filterCountry;
+        const matchStatus = !filterStatus || project.status === filterStatus;
+        const matchRisk = !filterRisk || project.risk === filterRisk;
+        return matchCountry && matchStatus && matchRisk;
+      });
+
+      if (filteredProjects.length === 0) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="12">
+              <div class="empty-state">
+                <div class="empty-state-icon">📋</div>
+                <h3>${t.emptyStateTitle}</h3>
+                <p>${t.emptyStateDesc}</p>
+              </div>
+            </td>
+          </tr>
+        `;
+        return;
+      }
+
+      tbody.innerHTML = filteredProjects.map(project => {
+        const statusText = project.status === 'active' ? t.statusActive : t.statusHold;
+        const riskText = project.risk === 'low' ? t.riskLow : (project.risk === 'medium' ? t.riskMedium : t.riskHigh);
+        
+        return `
+        <tr data-id="${project.__backendId}">
+          <td>
+            <div class="project-name">${project.project_name}</div>
+            <span class="project-id">${project.project_id}</span>
+          </td>
+          <td>${project.sector}</td>
+          <td>${project.beneficiary}</td>
+          <td>${project.client}</td>
+          <td>${project.lead}</td>
+          <td>${project.subconsultants || '-'}</td>
+          <td>
+            <div>${project.type}</div>
+            <span class="status-badge status-${project.status}">${statusText}</span>
+          </td>
+          <td>${project.contract_type}<br>${project.contract_value}</td>
+          <td>${project.period_start}<br>→ ${project.period_end}</td>
+          <td><span class="risk-badge risk-${project.risk}">${riskText}</span></td>
+          <td>${project.milestone_name || '-'}<br>${project.milestone_date ? `(${project.milestone_date})` : ''}</td>
+          <td>
+            <div class="actions">
+              <button class="action-btn primary" onclick="openProject('${project.__backendId}')">${t.btnOpen}</button>
+              <button class="action-btn secondary" onclick="viewContract('${project.__backendId}')">${t.btnContract}</button>
+              <button class="action-btn secondary" onclick="viewCalendar('${project.__backendId}')">${t.btnCalendar}</button>
+              <button class="action-btn secondary" onclick="editProject('${project.__backendId}')">${t.btnEdit}</button>
+              <button class="action-btn danger" onclick="deleteProject('${project.__backendId}')">${t.btnDelete}</button>
+            </div>
+          </td>
+        </tr>
+      `;
+      }).join('');
+    }
+
+    function openModal(isEdit = false) {
+      const t = translations[currentLanguage];
+      const title = isEdit ? t.modalTitleEdit : t.modalTitleAdd;
+      document.getElementById('modalTitle').textContent = title;
+      document.getElementById('projectModal').classList.add('active');
+    }
+
+    function closeModal() {
+      document.getElementById('projectModal').classList.remove('active');
+      document.getElementById('projectForm').reset();
+      editingProject = null;
+    }
+
+    async function openProject(projectId) {
+      const project = allProjects.find(p => p.__backendId === projectId);
+      if (project) {
+        openScopeManagement(projectId);
+      }
+    }
+
+    async function viewContract(projectId) {
+      const project = allProjects.find(p => p.__backendId === projectId);
+      if (project) {
+        showToast(`Opening contract for: ${project.project_name}`, 'success');
+      }
+    }
+
+    async function viewCalendar(projectId) {
+      const project = allProjects.find(p => p.__backendId === projectId);
+      if (project) {
+        showToast(`Opening calendar for: ${project.project_name}`, 'success');
+      }
+    }
+
+    function editProject(projectId) {
+      const project = allProjects.find(p => p.__backendId === projectId);
+      if (project) {
+        editingProject = project;
+        openModal(true);
+        
+        document.getElementById('projectId').value = project.project_id;
+        document.getElementById('projectName').value = project.project_name;
+        document.getElementById('sector').value = project.sector;
+        document.getElementById('beneficiary').value = project.beneficiary;
+        document.getElementById('client').value = project.client;
+        document.getElementById('lead').value = project.lead;
+        document.getElementById('subconsultants').value = project.subconsultants || '';
+        document.getElementById('type').value = project.type;
+        document.getElementById('status').value = project.status;
+        document.getElementById('contractType').value = project.contract_type;
+        document.getElementById('contractValue').value = project.contract_value;
+        document.getElementById('periodStart').value = project.period_start;
+        document.getElementById('periodEnd').value = project.period_end;
+        document.getElementById('risk').value = project.risk;
+        document.getElementById('country').value = project.country;
+        document.getElementById('milestoneName').value = project.milestone_name || '';
+        document.getElementById('milestoneDate').value = project.milestone_date || '';
+      }
+    }
+
+    async function deleteProject(projectId) {
+      const project = allProjects.find(p => p.__backendId === projectId);
+      if (!project) return;
+
+      const row = document.querySelector(`tr[data-id="${projectId}"]`);
+      const deleteBtn = row.querySelector('.action-btn.danger');
+      
+      if (deleteBtn.textContent === 'Delete') {
+        deleteBtn.textContent = 'Confirm?';
+        deleteBtn.style.background = '#ff0000';
+        
+        setTimeout(() => {
+          if (deleteBtn.textContent === 'Confirm?') {
+            deleteBtn.textContent = 'Delete';
+            deleteBtn.style.background = '';
+          }
+        }, 3000);
+        return;
+      }
+
+      deleteBtn.disabled = true;
+      deleteBtn.textContent = 'Deleting...';
+      
+      const result = await window.dataSdk.delete(project);
+      if (result.isOk) {
+        showToast('Project deleted successfully', 'success');
+      } else {
+        showToast('Failed to delete project', 'error');
+        deleteBtn.disabled = false;
+        deleteBtn.textContent = 'Delete';
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      // Language switcher
+      document.getElementById('langEn').addEventListener('click', () => switchLanguage('en'));
+      document.getElementById('langRu').addEventListener('click', () => switchLanguage('ru'));
+      
+      const modules = document.querySelectorAll('.module');
+      
+      modules.forEach(module => {
+        const header = module.querySelector('.module-header');
+        
+        header.addEventListener('click', () => {
+          const isExpanded = module.classList.contains('expanded');
+          modules.forEach(m => m.classList.remove('expanded'));
+          if (!isExpanded) {
+            module.classList.add('expanded');
+          }
+        });
+      });
+      
+      const moduleItems = document.querySelectorAll('.module-item');
+      moduleItems.forEach(item => {
+        item.addEventListener('click', (e) => {
+          e.stopPropagation();
+          moduleItems.forEach(i => i.classList.remove('active'));
+          item.classList.add('active');
+          
+          // Check if clicking on Initiation in Scope Management module
+          const parentModule = item.closest('.module');
+          if (parentModule && parentModule.dataset.module === 'scope' && item.dataset.item === 'initiation') {
+            openScopeManagement();
+          }
+        });
+      });
+      
+      // Scope Management Navigation
+      function openScopeManagement(projectId = null) {
+        document.querySelector('.scope-section').style.display = 'none';
+        document.querySelector('.projects-section').style.display = 'none';
+        document.getElementById('scopeManagementSection').classList.add('active');
+        
+        if (projectId) {
+          const project = allProjects.find(p => p.__backendId === projectId);
+          if (project) {
+            document.getElementById('scopeProjId').value = project.project_id;
+            document.getElementById('scopeProjName').value = project.project_name;
+            document.getElementById('scopeClient').value = project.beneficiary;
+            document.getElementById('scopeStage').value = project.type;
+            document.getElementById('scopeCountry').value = project.country;
+            document.getElementById('scopeBudget').value = project.contract_value;
+          }
+        }
+      }
+      
+      document.getElementById('backToProjectsBtn').addEventListener('click', () => {
+        document.getElementById('scopeManagementSection').classList.remove('active');
+        document.querySelector('.scope-section').style.display = 'block';
+        document.querySelector('.projects-section').style.display = 'block';
+      });
+      
+      // Scope Management Tabs
+      const scopeTabBtns = document.querySelectorAll('.scope-tab-btn');
+      scopeTabBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          const targetTab = btn.dataset.scopeTab;
+          
+          scopeTabBtns.forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          
+          document.querySelectorAll('.scope-tab-content').forEach(content => {
+            content.classList.remove('active');
+          });
+          
+          document.getElementById(`tab-${targetTab}`).classList.add('active');
+        });
+      });
+      
+      // Scope Project Form
+      document.getElementById('scopeProjectForm').addEventListener('submit', (e) => {
+        e.preventDefault();
+        showToast('Project links saved successfully', 'success');
+      });
+      
+      // Initiation Form
+      document.getElementById('initiationForm').addEventListener('submit', (e) => {
+        e.preventDefault();
+        showToast('Initiation data saved successfully', 'success');
+      });
+      
+      // Planning Form
+      document.getElementById('planningForm').addEventListener('submit', (e) => {
+        e.preventDefault();
+        showToast('Planning data saved successfully', 'success');
+      });
+      
+      // Definition Form - Deliverables
+      let deliverables = [];
+      document.getElementById('definitionForm').addEventListener('submit', (e) => {
+        e.preventDefault();
+        
+        const wbs = document.getElementById('delivWbs').value;
+        const name = document.getElementById('delivName').value;
+        const responsible = document.getElementById('delivResponsible').value;
+        const status = document.getElementById('delivStatus').value;
+        const link = document.getElementById('delivLink').value;
+        const done = document.getElementById('delivDone').value;
+        
+        if (wbs && name) {
+          deliverables.push({ wbs, name, responsible, status, link, done });
+          renderDeliverables();
+          document.getElementById('definitionForm').reset();
+          showToast('Deliverable added successfully', 'success');
+        }
+      });
+      
+      function renderDeliverables() {
+        const tbody = document.getElementById('tblDeliv');
+        if (deliverables.length === 0) {
+          tbody.innerHTML = '<tr><td colspan="6" style="padding: 20px; text-align: center; color: #888;">No deliverables added yet</td></tr>';
+          return;
+        }
+        
+        tbody.innerHTML = deliverables.map((d, index) => `
+          <tr style="border-bottom: 1px solid #e2e8f0;">
+            <td style="padding: 12px; font-weight: 600; color: #667eea;">${d.wbs}</td>
+            <td style="padding: 12px;">${d.name}</td>
+            <td style="padding: 12px;">${d.responsible || '-'}</td>
+            <td style="padding: 12px;">
+              <span style="display: inline-block; padding: 4px 8px; border-radius: 12px; font-size: 11px; font-weight: 600; background: ${d.status === 'Accepted' ? '#d4edda' : d.status === 'Submitted' ? '#fff3cd' : d.status === 'In progress' ? '#cfe2ff' : '#f8d7da'}; color: ${d.status === 'Accepted' ? '#155724' : d.status === 'Submitted' ? '#856404' : d.status === 'In progress' ? '#084298' : '#721c24'};">
+                ${d.status}
+              </span>
+            </td>
+            <td style="padding: 12px;">${d.link ? `<a href="${d.link}" target="_blank" style="color: #667eea; text-decoration: underline;">View</a>` : '-'}</td>
+            <td style="padding: 12px; font-size: 12px; color: #666; max-width: 200px;">${d.done || '-'}</td>
+          </tr>
+        `).join('');
+      }
+      
+      // Verification Form
+      document.getElementById('verificationForm').addEventListener('submit', (e) => {
+        e.preventDefault();
+        showToast('Verification criteria saved successfully', 'success');
+      });
+      
+      // Changes Form - Change Requests
+      let changeRequests = [];
+      document.getElementById('changesForm').addEventListener('submit', (e) => {
+        e.preventDefault();
+        
+        const id = document.getElementById('changeId').value;
+        const desc = document.getElementById('changeDesc').value;
+        const impact = document.getElementById('changeImpact').value;
+        const status = document.getElementById('changeStatus').value;
+        
+        if (id && desc) {
+          changeRequests.push({ id, desc, impact, status });
+          renderChangeRequests();
+          document.getElementById('changesForm').reset();
+          showToast('Change request added successfully', 'success');
+        }
+      });
+      
+      function renderChangeRequests() {
+        const tbody = document.getElementById('tblChange');
+        if (changeRequests.length === 0) {
+          tbody.innerHTML = '<tr><td colspan="4" style="padding: 20px; text-align: center; color: #888;">No change requests yet</td></tr>';
+          return;
+        }
+        
+        tbody.innerHTML = changeRequests.map((cr, index) => `
+          <tr style="border-bottom: 1px solid #e2e8f0;">
+            <td style="padding: 12px; font-weight: 600; color: #667eea;">${cr.id}</td>
+            <td style="padding: 12px;">${cr.desc}</td>
+            <td style="padding: 12px;">${cr.impact || '-'}</td>
+            <td style="padding: 12px;">
+              <span style="display: inline-block; padding: 4px 8px; border-radius: 12px; font-size: 11px; font-weight: 600; background: ${cr.status === 'Approved' ? '#d4edda' : cr.status === 'Rejected' ? '#f8d7da' : '#fff3cd'}; color: ${cr.status === 'Approved' ? '#155724' : cr.status === 'Rejected' ? '#721c24' : '#856404'};">
+                ${cr.status}
+              </span>
+            </td>
+          </tr>
+        `).join('');
+      }
+      
+      renderDeliverables();
+      renderChangeRequests();
+      
+      // AI Assistant functionality with localStorage
+      const AI_STORAGE_KEY = 'scope-ai-analyses';
+      let aiAnalyses = JSON.parse(localStorage.getItem(AI_STORAGE_KEY) || '[]');
+      
+      function saveAIToStorage() {
+        localStorage.setItem(AI_STORAGE_KEY, JSON.stringify(aiAnalyses));
+      }
+      
+      document.getElementById('aiForm').addEventListener('submit', (e) => {
+        e.preventDefault();
+        
+        const prompt = document.getElementById('aiPrompt').value.trim();
+        const response = document.getElementById('aiResponse').value.trim();
+        
+        if (!prompt || !response) {
+          showToast('Completează prompt și răspunsul AI.', 'error');
+          return;
+        }
+        
+        const analysis = {
+          id: Date.now().toString(),
+          prompt: prompt,
+          response: response,
+          timestamp: new Date().toISOString()
+        };
+        
+        aiAnalyses.push(analysis);
+        saveAIToStorage();
+        renderAIHistory();
+        
+        document.getElementById('aiForm').reset();
+        showToast('AI analysis saved successfully', 'success');
+      });
+      
+      document.getElementById('copyPromptBtn').addEventListener('click', () => {
+        const prompt = document.getElementById('aiPrompt').value;
+        if (!prompt) {
+          showToast('No prompt to copy', 'error');
+          return;
+        }
+        
+        navigator.clipboard.writeText(prompt).then(() => {
+          showToast('Prompt copied to clipboard!', 'success');
+        }).catch(() => {
+          showToast('Failed to copy prompt', 'error');
+        });
+      });
+      
+      function renderAIHistory() {
+        const container = document.getElementById('aiHistory');
+        
+        if (aiAnalyses.length === 0) {
+          container.innerHTML = '<p style="color: #888; text-align: center; padding: 20px;">No AI analyses saved yet</p>';
+          return;
+        }
+        
+        container.innerHTML = aiAnalyses.slice().reverse().map(analysis => {
+          const date = new Date(analysis.timestamp);
+          const formattedDate = date.toLocaleDateString() + ' ' + date.toLocaleTimeString();
+          
+          return `
+            <div style="background: #f8f9ff; border-left: 4px solid #6366f1; border-radius: 8px; padding: 16px;">
+              <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 12px;">
+                <div style="font-size: 11px; color: #888; font-weight: 600;">${formattedDate}</div>
+                <button onclick="deleteAIAnalysis('${analysis.id}')" style="background: #ef4444; color: white; border: none; padding: 4px 8px; border-radius: 4px; font-size: 11px; cursor: pointer; font-weight: 600;">Delete</button>
+              </div>
+              <div style="margin-bottom: 12px;">
+                <div style="font-size: 12px; font-weight: 600; color: #6366f1; margin-bottom: 4px;">📝 Prompt:</div>
+                <div style="font-size: 13px; color: #444; background: white; padding: 8px; border-radius: 4px; white-space: pre-wrap;">${analysis.prompt}</div>
+              </div>
+              <div>
+                <div style="font-size: 12px; font-weight: 600; color: #10b981; margin-bottom: 4px;">🤖 AI Response:</div>
+                <div style="font-size: 13px; color: #444; background: white; padding: 8px; border-radius: 4px; white-space: pre-wrap;">${analysis.response}</div>
+              </div>
+            </div>
+          `;
+        }).join('');
+      }
+      
+      window.deleteAIAnalysis = function(analysisId) {
+        const index = aiAnalyses.findIndex(a => a.id === analysisId);
+        if (index !== -1) {
+          aiAnalyses.splice(index, 1);
+          saveAIToStorage();
+          renderAIHistory();
+          showToast('AI analysis deleted', 'success');
+        }
+      };
+      
+      renderAIHistory();
+      
+      // Filter event listeners
+      document.getElementById('filterCountry').addEventListener('change', renderProjects);
+      document.getElementById('filterStatus').addEventListener('change', renderProjects);
+      document.getElementById('filterRisk').addEventListener('change', renderProjects);
+      
+      // Add project button
+      document.getElementById('addProjectBtn').addEventListener('click', () => {
+        if (allProjects.length >= 999) {
+          showToast('Maximum limit of 999 projects reached. Please delete some projects first.', 'error');
+          return;
+        }
+        openModal(false);
+      });
+      
+      // Cancel button
+      document.getElementById('cancelBtn').addEventListener('click', closeModal);
+      
+      // Close modal on overlay click
+      document.getElementById('projectModal').addEventListener('click', (e) => {
+        if (e.target.id === 'projectModal') {
+          closeModal();
+        }
+      });
+      
+      // Form submission
+      document.getElementById('projectForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        const saveBtn = document.getElementById('saveBtn');
+        saveBtn.disabled = true;
+        saveBtn.textContent = 'Saving...';
+        
+        const projectData = {
+          project_id: document.getElementById('projectId').value,
+          project_name: document.getElementById('projectName').value,
+          sector: document.getElementById('sector').value,
+          beneficiary: document.getElementById('beneficiary').value,
+          client: document.getElementById('client').value,
+          lead: document.getElementById('lead').value,
+          subconsultants: document.getElementById('subconsultants').value,
+          type: document.getElementById('type').value,
+          status: document.getElementById('status').value,
+          contract_type: document.getElementById('contractType').value,
+          contract_value: document.getElementById('contractValue').value,
+          period_start: document.getElementById('periodStart').value,
+          period_end: document.getElementById('periodEnd').value,
+          risk: document.getElementById('risk').value,
+          country: document.getElementById('country').value,
+          milestone_name: document.getElementById('milestoneName').value,
+          milestone_date: document.getElementById('milestoneDate').value
+        };
+        
+        let result;
+        if (editingProject) {
+          result = await window.dataSdk.update({
+            ...editingProject,
+            ...projectData
+          });
+        } else {
+          result = await window.dataSdk.create(projectData);
+        }
+        
+        if (result.isOk) {
+          showToast(editingProject ? 'Project updated successfully' : 'Project added successfully', 'success');
+          closeModal();
+        } else {
+          showToast('Failed to save project', 'error');
+          saveBtn.disabled = false;
+          saveBtn.textContent = 'Save Project';
+        }
+      });
+    });
+  </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'99ccdcace03c6adf',t:'MTc2Mjg1NDM4MS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
